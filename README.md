@@ -27,7 +27,7 @@ Then you can find there is a static library in the same directory.
 
 There is a eample usage in example folder, just type following to compile
 
-	# gcc epoll-server-example.c -Ilib/libepoll -Ilib/libutil -Llib/libepoll -lepoll -Llib/libutil -lutil -lpthread -o epoll
+	# gcc epoll-server-example.c -I../src -I../lib/libutil -L../src -lepoll -L../lib/libutil -lutil -lpthread -o epoll
 
 To remove the binary files
 
