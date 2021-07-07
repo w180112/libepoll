@@ -10,17 +10,17 @@ Git clone this repository
 
 	# git clone https://github.com/w180112/libepoll.git
 
-Type
+Use GNU build system to generate configure file and makefile to compile dependency library
 
-	# cd libepoll/src
+	# cd libepoll/lib/libutil && git submodule update --init --recursive
+	# autoreconf --install 
+	# ./configure && make
 
-Use GNU build system to generate configure file and makefile
+Use the same way to compile libepoll
 
+	# cd ../../src
 	# autoreconf --install
 	# ./configure
-
-Type make to compile
-
 	# make
 
 Then you can find there is a static library in the same directory.
@@ -32,4 +32,3 @@ There is a eample usage in example folder, just type following to compile
 To remove the binary files
 
 	# make clean
-
