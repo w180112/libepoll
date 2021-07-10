@@ -9,25 +9,15 @@ This is a epoll utility. Programmers can easily compile to static library and us
 Git clone this repository
 
 	# git clone https://github.com/w180112/libepoll.git
+	# cd libepoll && git submodule update --init --recursive
 
-Use GNU build system to generate configure file and makefile to compile dependency library
+First time we need to use GNU build system to generate configure file and makefile
 
-	# cd libepoll/lib/libutil && git submodule update --init --recursive
-	# autoreconf --install 
-	# ./configure && make
+	# make init
 
-Use the same way to compile libepoll
+Then make to compile all the dependency library, libepoll and the examples
 
-	# cd ../../src
-	# autoreconf --install
-	# ./configure
 	# make
-
-Then you can find there is a static library in the same directory.
-
-There is a eample usage in example folder, just type following to compile
-
-	# gcc epoll-server-example.c -I../src -I../lib/libutil -L../src -lepoll -L../lib/libutil -lutil -lpthread -o epoll
 
 To remove the binary files
 
