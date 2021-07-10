@@ -2,10 +2,11 @@
 #define _EPOLL_H_
 
 #include <common.h>
+#include "sock.h"
 
 #define ETH_MTU	1500
 
-STATUS epoll_server_init(tIPC_ID *Qid);
+STATUS epoll_server_init(tIPC_ID *Qid, char *if_name, SOCK_MODE_t sock_mode);
 void EPOLL_bye();
 
 /*-----------------------------------------

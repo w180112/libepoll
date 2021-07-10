@@ -4,16 +4,13 @@
 
 int main(int argc, char **argv)
 {
-    tIPC_PRIM		*ipc_prim;
     tEPOLL_MBX		*mail;
 	tMBUF   		mbuf;
 	int				msize;
-	U16				port;
-	U16				event;
 	U16				ipc_type;
     tIPC_ID         Qid = -1;
 
-    if (epoll_server_init(&Qid) == ERROR) {
+    if (epoll_server_init(&Qid, "eth0", TCP) == ERROR) {
         perror("init failed");
         return -1;
     }
@@ -37,15 +34,14 @@ int main(int argc, char **argv)
             /* Here is the msg we got */
             /* If msg len is 0, it means we recv tcp accept msg */
             if (mail->len == 0) {
-                U8 *json_str = "{\"action\":5,\"user_index\":0,\"vlan_id\":0}";
-                drv_xmit(json_str, strlen(json_str)+1, mail->eventfd);
+                const char *json_str = "{\"action\":5,\"user_index\":0,\"vlan_id\":0}";
+                drv_xmit((U8 *)json_str, strlen(json_str)+1, mail->eventfd, TCP);
                 break;
             }
-            //PRINT_MESSAGE(mail->refp, mail->len);
             /* Send back to client */
-            U8 *json_str = "{\"action\":0,\"user_index\":1,\"vlan_id\":100}";
+            const char *json_str = "{\"action\":0,\"user_index\":1,\"vlan_id\":100}";
             sleep(5);
-            drv_xmit(json_str, strlen(json_str)+1, mail->eventfd);
+            drv_xmit((U8 *)json_str, strlen(json_str)+1, mail->eventfd, TCP);
             //drv_xmit(mail->refp, mail->len, mail->eventfd);
 			break;
 		default:

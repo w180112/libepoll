@@ -16,7 +16,7 @@ void EPOLL_bye()
 {
     printf("epoll> delete Qid(0x%x)\n",epollQid);
     DEL_MSGQ(epollQid);
-	close(sock_info.listen_sock);
+	close(sock_info.sockfd);
     printf("bye!\n");
 	exit(0);
 }
@@ -36,8 +36,10 @@ STATUS EPOLL_ipc_init(void)
 	return TRUE;
 }
 
-STATUS epolldInit()
+STATUS epolldInit(char *if_name, SOCK_MODE_t sock_mode)
 {	
+	if (SOCK_INIT(&sock_info, if_name, sock_mode) == FALSE)
+		return ERROR;
 	if (EPOLL_ipc_init() == ERROR)
 		return ERROR;
 
@@ -46,13 +48,24 @@ STATUS epolldInit()
     return TRUE;
 }
 
-STATUS epoll_server_init(tIPC_ID *Qid)
+STATUS epoll_server_init(tIPC_ID *Qid, char *if_name, SOCK_MODE_t sock_mode)
 {
-	if (epolldInit() != TRUE)
+	if (epolldInit(if_name, sock_mode) != TRUE)
 		return ERROR;
 	
 	pthread_t t;
-  	pthread_create(&t, NULL, (void *)SOCK_INIT, &sock_info);
+	switch (sock_mode) {
+	case RAW:
+		pthread_create(&t, NULL, (void *)raw_recvd, &sock_info);
+		break;
+	case TCP:
+		pthread_create(&t, NULL, (void *)tcp_recvd, &sock_info);
+		break;
+	default:
+		printf("Wrong sock mode detected.\n");
+		return FALSE;
+	}
+  	
 	/*if (fork() == 0) {
 		SOCK_INIT(&sock_info);
    		//sockd(sock_info);

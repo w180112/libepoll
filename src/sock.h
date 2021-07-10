@@ -16,11 +16,17 @@
 
 struct sock_info {
     int epfd;
-    int listen_sock;
+    int sockfd;
 };
 
-extern STATUS SOCK_INIT(struct sock_info *sock_info);
-extern void drv_xmit(U8 *mu, U16 mulen, int eventfd);
-extern void sockd(struct sock_info *sockinfo);
+typedef enum {
+    RAW,
+    TCP
+}SOCK_MODE_t;
+
+extern STATUS SOCK_INIT(struct sock_info *sock_info, char *if_name, SOCK_MODE_t sock_mode);
+extern void drv_xmit(U8 *mu, U16 mulen, int eventfd, SOCK_MODE_t sock_mode);
+extern void raw_recvd(struct sock_info *sockinfo);
+extern void tcp_recvd(struct sock_info *sockinfo);
 
 #endif
